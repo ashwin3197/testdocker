@@ -9,21 +9,21 @@ pipeline{
 	stages {
 	    
 	    stage('gitclone') {
-
+			echo("gitclone")
 			steps {
-				git 'https://github.com/shazforiot/nodeapp_test.git'
+				 checkout scmGit(branches: [[name: '**']], extensions: [], userRemoteConfigs: [[credentialsId: 'githubToken', url: 'https://github.com/ashwin3197/testdocker.git']])
 			}
 		}
 
 		stage('Build') {
-
+			echo("Build")
 			steps {
-				sh 'docker build -t thetips4you/nodeapp_test:latest .'
+				sh 'docker build -t JenkinsdockerImage/nodeapp_test:latest .'
 			}
 		}
 
 		stage('Login') {
-
+			echo("Login")
 			steps {
 				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 			}
@@ -32,7 +32,7 @@ pipeline{
 		stage('Push') {
 
 			steps {
-				sh 'docker push thetips4you/nodeapp_test:latest'
+				sh 'docker push JenkinsdockerImage/nodeapp_test:latest'
 			}
 		}
 	}
